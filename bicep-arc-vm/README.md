@@ -137,7 +137,7 @@ You'll also need the following installed locally:
 
     @description('The virtual machine admin username.')
     @minLength(5)
-    param adminUsername string = 'anoobbacker'
+    param adminUsername string = 'anoobbacker' //Replace with your admin user name
 
     @description('The virtual machine admin password.')
     @minLength(9)
