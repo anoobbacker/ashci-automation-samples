@@ -1,4 +1,4 @@
-# Azure Stack HCI Automation Samples
+# Learn Azure Stack HCI Automation
 This repository contains a set of automation files to help manage Azure Stack HCI environments. 
 
 # Contents
