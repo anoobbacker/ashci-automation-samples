@@ -76,7 +76,7 @@ You'll also need the following installed locally:
 ## Create Bicep file
 1. To download the Azure Marketplace VM images, create `bicep/vmimage-create.bicep`.
 2. Save your changes to the file. Your file should look like this example:
-    ```json
+    ```bicep
     @description('The Azure region into which the resources should be deployed.')
     param region string = resourceGroup().location
 
@@ -131,7 +131,7 @@ You'll also need the following installed locally:
     ```
 3. To create Arc VMs on Azure Stack HCI using Azure Marketplace VM images, create `bicep/vm-create.bicep`.
 4.  Save your changes to the file. Your file should look like this example:
-    ```json
+    ```bicep
     @description('The Azure region into which the resources should be deployed.')
     param region string = resourceGroup().location
 
