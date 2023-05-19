@@ -1,0 +1,9 @@
+{
+    "name": "AADFEDCRED-NAME-PLACEHOLDER",
+    "issuer": "https://GIHUB-ISSUER-PLACEHOLDER",
+    "subject": "repo:GITHUB-ORG-NAME-PLACEHOLDER/GITHUB-REPO-NAME-PLACEHOLDER:ref:refs/heads/main",
+    "description": "AADFEDCRED-DESCRIPTION-PLACEHOLDER",
+    "audiences": [
+        "api://AADFEDCRED-AUDIENCE-PLACEHOLDER"
+    ]
+}

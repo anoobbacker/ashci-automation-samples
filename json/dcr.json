@@ -1,0 +1,66 @@
+{
+    "properties": {
+      "dataCollectionEndpointId": "/subscriptions/SUBSCRIPTION-PLACEHOLDER/resourceGroups/RESOURCEGROUP-PLACEHOLDER/providers/Microsoft.Insights/dataCollectionEndpoints/DCE-NAME-PLACEHOLDER",
+      "destinations": {
+        "logAnalytics": [
+          {
+            "workspaceResourceId": "/subscriptions/SUBSCRIPTION-PLACEHOLDER/resourceGroups/RESOURCEGROUP-PLACEHOLDER/providers/Microsoft.OperationalInsights/workspaces/WORKSPACENAME-PLACEHOLDER",
+            "name": "DCR-NAME-PLACEHOLDER"
+          },
+          {
+            "workspaceResourceId": "/subscriptions/SUBSCRIPTION-PLACEHOLDER/resourceGroups/RESOURCEGROUP-PLACEHOLDER/providers/Microsoft.OperationalInsights/workspaces/WORKSPACENAME-PLACEHOLDER",
+            "name": "DCR-ID-PLACEHOLDER"
+          }
+        ]
+      },
+      "dataSources": {
+        "performanceCounters": [
+          {
+            "name": "perfCounterDataSource",
+            "samplingFrequencyInSeconds": 10,
+            "streams": [
+              "Microsoft-Perf"
+            ],
+            "counterSpecifiers": [
+              "\\Memory(*)\\Available Bytes",
+              "\\Network Interface(*)\\Bytes Total/sec",
+              "\\Processor(_Total)\\% Processor Time",
+              "\\RDMA Activity(*)\\RDMA Inbound Bytes/sec",
+              "\\RDMA Activity(*)\\RDMA Outbound Bytes/sec"
+            ]
+          }
+        ],
+        "windowsEventLogs": [
+          {
+            "name": "eventLogsDataSource",
+            "streams": [
+              "Microsoft-Event"
+            ],
+            "xPathQueries": [
+              "Microsoft-Windows-FailoverClustering/Diagnostic",
+              "Microsoft-Windows-SDDC-Management/Operational!*[System[(EventID=3000 or EventID=3001 or EventID=3002 or EventID=3003 or EventID=3004)]]",
+              "microsoft-windows-health/operational!*"
+            ]
+          }
+        ]
+      },
+      "dataFlows": [
+        {
+          "streams": [
+            "Microsoft-Perf"
+          ],
+          "destinations": [
+            "DCR-ID-PLACEHOLDER"
+          ]
+        },
+        {
+          "streams": [
+            "Microsoft-Event"
+          ],
+          "destinations": [
+            "DCR-ID-PLACEHOLDER"
+          ]
+        }
+      ]
+    }
+  }

@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Treat unset variables as an error when substituting
+set -u
+
+# Consider failure of any part of a pipe as a whole pipe failure
+set -o pipefail
+
+# Log file
+logfile="./output.log"
+
+# Assigning default values for variable
+subscription=${1:-"00000000-0000-0000-0000-000000000000"} # Replace with your subscription ID
+resourcegroup=${2:-"hcicluster-rg"} # Replace with your resource group name
+region=${3:-"eastus"} # Replace with your region
+clusterName=${4:-"HCICluster"} # Replace with your cluster name
+dcrName=${5:-"hcicluster-dcr-rule"} # Replace with your DCR name
+dcrFile=${6:-"dcr.json"} # Replace with your DCR file
+dcrWorkSpace=${7:-"hcicluster-la-workspace01"} # Replace with your Log Analytics workspace name
+dcrAssociationName=${8:-"hcicluster-dcr-association"} # Replace with your DCR association name
+
+# Assign variables
+extensionName="AzureMonitorWindowsAgent"
+arcSettingName="default"
+extensionType="AzureMonitorWindowsAgent"
+extensionPublisher="Microsoft.Azure.Monitor"
+dcrId="e-893e-96cf53985a57"
+dcrClusterResourceId="/subscriptions/${subscription}/resourceGroups/${resourcegroup}/providers/Microsoft.AzureStackHCI/clusters/${clusterName}"
+dcrRuleId="/subscriptions/${subscription}/resourceGroups/${resourcegroup}/providers/Microsoft.Insights/dataCollectionRules/${dcrName}"
+dcrTempFile="dcr-temp.json"
+dceName=${14:-"hcicluster-dce"}
+
+echo "Values assigned for: subscription ${subscription}"
+echo "Values assigned for: resourcegroup ${resourcegroup}"
+echo "Values assigned for: clusterName ${clusterName}"
+echo "Values assigned for: arcSettingName ${arcSettingName}"
+echo "Values assigned for: extensionName ${extensionName}"
+echo "Values assigned for: extensionPublisher ${extensionPublisher}"
+echo "Values assigned for: extensionType ${extensionType}"
+echo "Values assigned for: dcrName ${dcrName}"
+echo "Values assigned for: dcrFile ${dcrFile}"
+echo "Values assigned for: dcrWorkSpace ${dcrWorkSpace}"
+echo "Values assigned for: dcrId ${dcrId}"
+echo "Values assigned for: dcrAssociationName ${dcrAssociationName}"
+echo "Values assigned for: dcrClusterResourceId ${dcrClusterResourceId}"
+echo "Values assigned for: dcrRuleId ${dcrRuleId}"
+echo "Values assigned for: dcrTempFile ${dcrTempFile}"
+echo "Values assigned for: dceName ${dceName}"
+echo ""
+
+# Ensure that the Azure CLI is logged in and set to the correct subscription
+echo "Ensuring that the Azure CLI is logged in and set to the correct subscription" | tee -a $logfile
+if az account show --output none; then
+    echo "Setting subscription to ${subscription}" | tee -a $logfile
+    echo ""
+    az account set --subscription "${subscription}" || { echo "Failed to set subscription. Exiting." | tee -a $logfile; exit 1; }
+else
+    echo "Azure CLI not logged in. Please log in and try again." | tee -a $logfile
+    exit 1
+fi
+
+# Querying the list of extensions for the specified cluster
+echo "Checking if extension ${extensionName} exists" | tee -a $logfile
+extn_ids=$(az stack-hci extension list \
+    --arc-setting-name "${arcSettingName}" \
+    --cluster-name "${clusterName}" \
+    --resource-group "${resourcegroup}"  \
+    --query "[?name=='${extensionName}'].{Name:name, ManagedBy:managedBy, ProvisionStatus:provisioningState, State: aggregateState, Type:extensionParameters.type}"  \
+    -o table) || { echo "Failed to get extension list. Exiting."| tee -a $logfile; exit 1; }
+
+if [ -z "$extn_ids" ]
+then
+    echo "No extension found with name ${extensionName}" | tee -a $logfile
+      
+    echo "Creating extension with name ${extensionName}" | tee -a $logfile
+    az stack-hci extension create \
+        --arc-setting-name "${arcSettingName}" \
+        --cluster-name "${clusterName}" \
+        --resource-group "${resourcegroup}" \
+        --name "${extensionName}" \
+        --auto-upgrade "true" \
+        --publisher "${extensionPublisher}" \
+        --type "${extensionType}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
+    
+else
+    echo "Extension with name ${extensionName} already exits. Skipping extension creation!" | tee -a $logfile
+fi
+
+echo ""
+echo "Checking if DCE ${dceName} exists" | tee -a $logfile
+dceIds=$(az monitor data-collection endpoint list --resource-group "${resourcegroup}" --query "[?name=='${dceName}'].[id]" --output tsv || { echo "Failed to list DCE. Exiting." | tee -a $logfile; exit 1; })
+if [ -z "${dceIds}" ]
+then
+    echo "No DCE found with name ${dceName}" | tee -a $logfile
+
+    echo "Creating DCE ${dceName}" | tee -a $logfile
+    az monitor data-collection endpoint create --resource-group "${resourcegroup}" --location "${region}" --name "${dceName}" --public-network-access "Enabled" || { echo "Failed to DCE. Exiting." | tee -a $logfile; exit 1; }
+else
+    echo "DCE with name ${dceName} already exits. Skipping DCE creation!" | tee -a $logfile
+fi
+
+echo ""
+echo "Checking if DCR ${dcrName} exists" | tee -a $logfile
+dcrRuleIds=$(az monitor data-collection rule list --resource-group "${resourcegroup}" --query "[?name=='${dcrName}'].[id, name, location]" --output tsv || { echo "Failed to list DCR. Exiting." | tee -a $logfile; exit 1; })
+if [ -z "${dcrRuleIds}" ]
+then
+    echo "No DCR found with name ${dcrName}" | tee -a $logfile
+
+    echo "Creating temporary DCR file ${dcrTempFile} from ${dcrFile}" | tee -a $logfile
+    cp ${dcrFile} ${dcrTempFile} || { echo "Failed to copy ${dcrFile} to ${dcrTempFile}. Exiting." | tee -a $logfile; }
+
+    echo "Replacing placeholders in DCR file ${dcrTempFile}" | tee -a $logfile
+    sed -i "s/WORKSPACENAME-PLACEHOLDER/${dcrWorkSpace}/g" "${dcrTempFile}" || { echo "Failed to replace WORKSPACE-RESOURCE-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile; }
+    sed  -i "s/SUBSCRIPTION-PLACEHOLDER/${subscription}/g" "${dcrTempFile}" || { echo "Failed to replace SUBSCRIPTION-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
+    sed  -i "s/RESOURCEGROUP-PLACEHOLDER/${resourcegroup}/g" "${dcrTempFile}" || { echo "Failed to replace RESOURCEGROUP-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
+    sed  -i "s/DCR-NAME-PLACEHOLDER/${dcrWorkSpace}/g" "${dcrTempFile}" || { echo "Failed to replace DCR-NAME-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
+    sed  -i "s/DCR-ID-PLACEHOLDER/${dcrId}/g" "${dcrTempFile}" || { echo "Failed to replace DCR-ID-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
+    sed  -i "s/DCE-NAME-PLACEHOLDER/${dceName}/g" "${dcrTempFile}" || { echo "Failed to replace DCE-NAME-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}    
+
+    echo "Creating DCR ${dcrName} using ${dcrTempFile}"  | tee -a $logfile
+    az monitor data-collection rule create --name "${dcrName}" --resource-group "${resourcegroup}" --rule-file "${dcrTempFile}" --description "Automation Demo DCR created" --location "${region}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
+    
+else
+    echo "DCR with name ${dcrName} already exits. Skipping DCR creation!" | tee -a $logfile
+fi
+
+echo ""
+echo "Checking if DCR association ${dcrAssociationName} exists" | tee -a $logfile
+dcrRuleAssocIds=$(az monitor data-collection rule association list --resource-group "${resourcegroup}" --rule-name "${dcrName}" --query "[?name=='${dcrAssociationName}'].[id]" --output tsv || { echo "Failed to list DCR Association. Exiting." | tee -a $logfile; exit 1; })
+if [ -z "${dcrRuleAssocIds}" ]
+then
+    echo "Create DCR associating for ${dcrRuleId} ==> ${dcrClusterResourceId}" | tee -a $logfile
+    az monitor data-collection rule association create --name "${dcrAssociationName}" --resource "${dcrClusterResourceId}" --rule-id "${dcrRuleId}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
+else
+    echo "DCR association with name ${dcrAssociationName} already exits. Skipping DCR association creation!" | tee -a $logfile
+fi
+
+#TODO: Add association between DCE and Cluster resource
+#TODO: Change Windows Even Log's data collection from Basic to Custom with XPath query as Microsoft-Windows-FailoverClustering/Diagnostic along with SDDC, microsoft-windows-health/operational!*, Microsoft-Windows-ReFSDedupSVC!*
+#TODO: Create a workbook with Log Analytics workspace Logs Query:
+    # Event 
+    # I where EventLog =~ "Microsoft-Windows-Fai10verC1ustering/Diagnostic" and EventlD == "2849" 
+    # I where Computer contains "Saniya-VM3"
+    # I make-series ClusterAvailability = iff ( count()>0,1,0) on TimeGenerated from {timeRange:start} to {timeRange:end} step 1h 
+    # I project TimeGenerated, ClusterAvailability
+#TODO: Create a new log alert rule using the search query, dimension as nodeName, email notification action group
