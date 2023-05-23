@@ -38,15 +38,10 @@ You'll also need the following installed locally:
 ](https://code.visualstudio.com/docs/sourcecontrol/github).
 
 ## Create a workflow identity
-1. Launch Cloud Shell from the the top navigation of the Azure Portal. Refer [Quickstart for Azure Cloud Shell](https://learn.microsoft.com/azure/cloud-shell/quickstart?tabs=azurecli)
-2. Upload the below files into Cloud Shell. Refer [Upload files](https://learn.microsoft.com/azure/cloud-shell/using-the-shell-window#upload-and-download-files)
-    1. To setup identity, upload script [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh) 
-    2. To set up AAD Federation Credentials, upload JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON
-3. In Azure Cloud Shell, change the permission to execute the file.
-    ```bash
-    chmod +x workflow-identity-setup.sh
-    ```
-4. Change the variables in `workflow-identity-setup.sh`
+1. Download the files `` and ``:
+    1 To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh) 
+    2. To set up AAD Federation Credentials, download JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON
+2. Change the variables in `workflow-identity-setup.sh`
     ```bash
     # Assigning default values for variable
     subscription=${1:-"00000000-0000-0000-0000-000000000000"} # Replace with your Subscription ID
@@ -55,7 +50,13 @@ You'll also need the following installed locally:
     githubRepositoryName=${4:-"ashci-automation-samples"} # Replace with your GitHub repository
     aadFedCredFile=${5:-"./aad-fed-cred.json"} # Replace with the path to your AAD Fed Cred JSON file
     ```
-5. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
+3. Launch Cloud Shell from the the top navigation of the Azure Portal. Refer [Quickstart for Azure Cloud Shell](https://learn.microsoft.com/azure/cloud-shell/quickstart?tabs=azurecli)
+4. Upload files `workflow-identity-setup.sh` and `aad-fed-cred.json` into Cloud Shell. Refer [Upload files](https://learn.microsoft.com/azure/cloud-shell/using-the-shell-window#upload-and-download-files)
+5. In Azure Cloud Shell, change the permission to execute the file.
+    ```bash
+    chmod +x workflow-identity-setup.sh
+    ```
+6. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
     ```bash
     ...
     AZURE_CLIENT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
