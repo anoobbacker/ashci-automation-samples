@@ -125,5 +125,5 @@ fi
 tenantId=$(az account show --query "tenantId" --output tsv || { echo "Failed to list AAD app. Exiting." | tee -a $logfile; exit 1; })
 
 echo "AZURE_CLIENT_ID: ${githubRepoAppId}" | tee -a $logfile
-echo "AZURE_TENANT_ID: ${tenantId}" | tee -a $logfile
 echo "AZURE_SUBSCRIPTION_ID: ${subscription}" | tee -a $logfile
+echo "AZURE_TENANT_ID: ${tenantId}" | tee -a $logfile
