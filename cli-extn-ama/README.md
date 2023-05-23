@@ -123,16 +123,28 @@ You'll also need the following installed locally:
 
     # Assigning default values for variable
     subscription=${1:-"00000000-0000-0000-0000-000000000000"} # Replace with your subscription ID
-    resourcegroup=${2:-"hcicluster-rg"} # Replace with your resource group name
+    resourceGroup=${2:-"hcicluster-rg"} # Replace with your resource group name
     region=${3:-"eastus"} # Replace with your region
     clusterName=${4:-"HCICluster"} # Replace with your cluster name
     dcrName=${5:-"hcicluster-dcr-rule"} # Replace with your DCR name
     dcrFile=${6:-"dcr.json"} # Replace with your DCR file
     dcrWorkSpace=${7:-"hcicluster-la-workspace01"} # Replace with your Log Analytics workspace name
     dcrAssociationName=${8:-"hcicluster-dcr-association"} # Replace with your DCR association name
+    dceName=${9:-"hcicluster-dce"} # Replace with your DCE Name
 
+    # Assign variables
+    extensionName="AzureMonitorWindowsAgent"
+    arcSettingName="default"
+    extensionType="AzureMonitorWindowsAgent"
+    extensionPublisher="Microsoft.Azure.Monitor"
+    dcrId="e-893e-96cf53985a57"
+    clusterResourceId="/subscriptions/${subscription}/resourceGroups/${resourceGroup}/providers/Microsoft.AzureStackHCI/clusters/${clusterName}"
+    dcrRuleId="/subscriptions/${subscription}/resourceGroups/${resourceGroup}/providers/Microsoft.Insights/dataCollectionRules/${dcrName}"
+    dcrTempFile="dcr-temp.json"
+
+    echo ""
     echo "Values assigned for: subscription ${subscription}"
-    echo "Values assigned for: resourcegroup ${resourcegroup}"
+    echo "Values assigned for: resourceGroup ${resourceGroup}"
     echo "Values assigned for: clusterName ${clusterName}"
     echo "Values assigned for: arcSettingName ${arcSettingName}"
     echo "Values assigned for: extensionName ${extensionName}"
@@ -143,16 +155,16 @@ You'll also need the following installed locally:
     echo "Values assigned for: dcrWorkSpace ${dcrWorkSpace}"
     echo "Values assigned for: dcrId ${dcrId}"
     echo "Values assigned for: dcrAssociationName ${dcrAssociationName}"
-    echo "Values assigned for: dcrClusterResourceId ${dcrClusterResourceId}"
+    echo "Values assigned for: clusterResourceId ${clusterResourceId}"
     echo "Values assigned for: dcrRuleId ${dcrRuleId}"
     echo "Values assigned for: dcrTempFile ${dcrTempFile}"
     echo "Values assigned for: dceName ${dceName}"
-    echo ""
     ```
 2. Replace the variables with your environment values like _subscription_, _resourcegroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkspace_, _dcrAssociationName_
 3. Ensure that subscription is set properly add the below:
     ```bash
     # Ensure that the Azure CLI is logged in and set to the correct subscription
+    echo ""
     echo "Ensuring that the Azure CLI is logged in and set to the correct subscription" | tee -a $logfile
     if az account show --output none; then
         echo "Setting subscription to ${subscription}" | tee -a $logfile
@@ -166,6 +178,7 @@ You'll also need the following installed locally:
 4. To set up the Insights extension add the below:
     ```bash
     # Querying the list of extensions for the specified cluster
+    echo ""
     echo "Checking if extension ${extensionName} exists" | tee -a $logfile
     extn_ids=$(az stack-hci extension list \
         --arc-setting-name "${arcSettingName}" \
