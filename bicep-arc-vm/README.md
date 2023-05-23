@@ -56,7 +56,8 @@ You'll also need the following installed locally:
     ```bash
     chmod +x workflow-identity-setup.sh
     ```
-6. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
+6. Ensure that you've permissions to create Azure AD Application and assign the application "Contributor" permissions to the resource group. If not, ask this script to be executed by  your administrator.
+7. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
     ```bash
     ...
     AZURE_CLIENT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
