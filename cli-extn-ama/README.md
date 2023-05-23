@@ -58,7 +58,7 @@ You'll also need the following installed locally:
                 "Microsoft-Perf"
                 ],
                 "counterSpecifiers": [
-                "\\Memory(*)\\Available Bytes",
+                "\\Memory\\Available Bytes",
                 "\\Network Interface(*)\\Bytes Total/sec",
                 "\\Processor(_Total)\\% Processor Time",
                 "\\RDMA Activity(*)\\RDMA Inbound Bytes/sec",
@@ -73,7 +73,7 @@ You'll also need the following installed locally:
                 "Microsoft-Event"
                 ],
                 "xPathQueries": [
-                "Microsoft-Windows-FailoverClustering/Diagnostic",
+                "Microsoft-Windows-FailoverClustering/Diagnostic!*",
                 "Microsoft-Windows-SDDC-Management/Operational!*[System[(EventID=3000 or EventID=3001 or EventID=3002 or EventID=3003 or EventID=3004)]]",
                 "microsoft-windows-health/operational!*"
                 ]
@@ -99,7 +99,7 @@ You'll also need the following installed locally:
             }
         ]
         }
-    }
+    }    
     ```
 
 ## Create the script
