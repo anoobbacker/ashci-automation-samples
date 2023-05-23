@@ -38,8 +38,13 @@ You'll also need the following installed locally:
 ](https://code.visualstudio.com/docs/sourcecontrol/github).
 
 ## Create a workflow identity
+> NOTE
+> To successfully run the below script to set up you need to appropriate permissions. If not, ask this script to be executed by  your administrator.
+>    - Ensure that you've permissions to create Azure AD Application
+>    - Assign the AAD application "Contributor" permissions to the resource group where VMs and VM images will be created. You must have access to the `Microsoft.Authorization/roleAssignments/write` action. Of the built-in roles, only [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) and [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) and are granted access to this action.
+
 1. Download the files `workflow-identity-setup.sh` and `aad-fed-cred.json`:
-    1 To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh)
+    1. To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh)
     2. To set up AAD Federation Credentials, download JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON.
 2. Change the variables in `workflow-identity-setup.sh`
     ```bash
@@ -56,8 +61,7 @@ You'll also need the following installed locally:
     ```bash
     chmod +x workflow-identity-setup.sh
     ```
-6. Ensure that you've permissions to create Azure AD Application and assign the application "Contributor" permissions to the resource group. If not, ask this script to be executed by  your administrator.
-7. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
+6. Execute the script `workflow-identity-setup.sh` to show you the value you need to create as GitHub secrets.
     ```bash
     ...
     AZURE_CLIENT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
@@ -72,7 +76,7 @@ You'll also need the following installed locally:
 5. In the **Value** field, paste the GUID from the first line of the terminal output. Don't include *AZURE_CLIENT_ID*, the colon, or any spaces in the value.
 6. Click **Add secret**.
 7. Repeat the process to create the secrets for *AZURE_TENANT_ID* and *AZURE_SUBSCRIPTION_ID*, copying the values from the corresponding fields in the terminal output.
-8. Repeat the process to create the secret for *VMADMIN_DEFAULT_PASSWORD*
+8. Repeat the process to create the secret for *VMADMIN_DEFAULT_PASSWORD*. The value here would be the default password for your virtual machines.
 8. Verify that all four secrets *AZURE_CLIENT_ID*, *AZURE_TENANT_ID*,  *AZURE_SUBSCRIPTION_ID* and *VMADMIN_DEFAULT_PASSWORD* shows in your list of secrets now.
 
 ## Create Bicep file
