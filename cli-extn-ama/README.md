@@ -20,6 +20,8 @@ You want to find a way to automate this process.
 2. Use Azure Cloud Shell’s Bash environment.
 3. Run Azure CLI script to automate the tasks.
 
+![image](https://github.com/anoobbacker/ashci-automation-samples/assets/13219906/e0c62aac-5f83-464c-9d6d-216a34c0fea1)
+
 # Steps
 
 ## Prerequisites
