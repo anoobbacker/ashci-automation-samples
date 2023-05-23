@@ -20,6 +20,10 @@ You decide to create a deployment workflow that will run automatically every tim
 2. Set up GitHub Actions to run automatically when Bicep code is updated
 3. Configure Actions to deploy VM images and VMs from Azure.
 
+![image](https://github.com/anoobbacker/ashci-automation-samples/assets/13219906/85ad61a9-2936-4aa6-8290-65a241193881)
+
+
+
 # Steps
 
 ## Prerequisites
