@@ -38,9 +38,9 @@ You'll also need the following installed locally:
 ](https://code.visualstudio.com/docs/sourcecontrol/github).
 
 ## Create a workflow identity
-1. Download the files `` and ``:
-    1 To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh) 
-    2. To set up AAD Federation Credentials, download JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON
+1. Download the files `workflow-identity-setup.sh` and `aad-fed-cred.json`:
+    1 To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh)
+    2. To set up AAD Federation Credentials, download JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON.
 2. Change the variables in `workflow-identity-setup.sh`
     ```bash
     # Assigning default values for variable
