@@ -33,7 +33,7 @@ You'll also need the following installed locally:
 
 ## Create and clone the GitHub repository in VS Code
 1. In a browser, go to [GitHub](www.github.com). Sign in by using your GitHub account, or create a new account if you don't have one.
-2. Create a new repository on your personal account or any organization. Refer [Create a new repository](https://docs.github.com/repositories/creating-and-managing-repositories/creating-a-new-repository).
+2. Create [a new repository](https://github.com/new) on your personal account or any organization. Refer [Create a new repository](https://docs.github.com/repositories/creating-and-managing-repositories/creating-a-new-repository).
 3. In Visual Studio Code, clone your repository. Refer [Working with GitHub in VS Code
 ](https://code.visualstudio.com/docs/sourcecontrol/github).
 
