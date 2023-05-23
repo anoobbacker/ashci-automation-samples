@@ -11,7 +11,7 @@ Suppose you’re responsible for managing Azure Stack HCI clusters deployed acro
 
 To guarantee a reliable user experience, it is crucial to minimize downtime.
 
-You got to learn that Azure Stack HCI clusters support monitoring features and proactive notifications can be set up from Azure.
+You got to learn that Azure Stack HCI clusters support monitoring features and can be set up from Azure.
 
 You want to find a way to automate this process.
 
