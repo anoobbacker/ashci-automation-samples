@@ -1,6 +1,8 @@
 # Automation: Azure Marketplace VMs on HCI using Bicep and GitHub Actions!
 In this sample, you'll learn how to define creating Azure Marketplace VM images on HCI and creating VMs using those image in GitHub Action and how to deploy your Bicep code by using the workflow.
 
+Short URL to this page: [https://aka.ms/ashci/automate-bicep/github-actions](https://aka.ms/ashci/automate-bicep/github-actions)
+
 # Problem 
 1. To set up VM images, users manually had to download the operating system images, set up a VM, and create a generalized VM image.
 2. To keep track of new updates, such as security patches, bug fixes, and feature enhancements, users were manually tracking and deploying updates.
