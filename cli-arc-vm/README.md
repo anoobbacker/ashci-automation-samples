@@ -1,6 +1,8 @@
 # Azure CLI Automation: Start and Stop Arc VMs on Azure Stack HCI
 In this sample, you'll learn how to start and stop Arc VMs on Azure Stack HCI using Azure CLI.
 
+Short URL to this page: [https://aka.ms/ashci/automate-cli/arc-vm](https://aka.ms/ashci/automate-cli/arc-vm)
+
 # Problem
 - Performing multiple tasks on many HCI clusters through Azure Portal become an effort intensive and time-consuming process, especially when these tasks needs to be frequently repeated.
 - Organization’s skilled administrators prefer Linux based Bash scripting to automate tasks from Azure. Otherwise, they require training in ARM templates or Azure PowerShell, this need time and delays deployment.
@@ -20,6 +22,8 @@ You want to find a way to automate this process.
 1. Author Azure CLI script. Azure CLI syntax is like Bash scripting
 2. Use Azure Cloud Shell’s Bash environment.
 3. Run Azure CLI script to automate the tasks.
+
+![image](https://github.com/anoobbacker/ashci-automation-samples/assets/13219906/e0c62aac-5f83-464c-9d6d-216a34c0fea1)
 
 # Steps
 
