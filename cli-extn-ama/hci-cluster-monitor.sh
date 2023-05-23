@@ -22,10 +22,6 @@ dcrFile=${6:-"dcr.json"} # Replace with your DCR file
 dcrWorkSpace=${7:-"hcicluster-la-workspace01"} # Replace with your Log Analytics workspace name
 dcrAssociationName=${8:-"hcicluster-dcr-association"} # Replace with your DCR association name
 dceName=${9:-"hcicluster-dce"} # Replace with your DCE Name
-alertRuleName=${10:-"hcicluster-alert"} # Replace with your Log Alert Rule Name
-alertActionGroupName=${11:-"hcicluster-actiongrp"} # Replace with your Alert Action Group
-alertAdminEmail=${12:-"email@domain.com"} # Replace with your admin email.
-alertCPUThreshold=${12:-1} # Replace with your CPU Threshold, setting a low value to validate email getting generated
 
 # Assign variables
 extensionName="AzureMonitorWindowsAgent"
@@ -37,6 +33,7 @@ clusterResourceId="/subscriptions/${subscription}/resourceGroups/${resourceGroup
 dcrRuleId="/subscriptions/${subscription}/resourceGroups/${resourceGroup}/providers/Microsoft.Insights/dataCollectionRules/${dcrName}"
 dcrTempFile="dcr-temp.json"
 
+echo ""
 echo "Values assigned for: subscription ${subscription}"
 echo "Values assigned for: resourceGroup ${resourceGroup}"
 echo "Values assigned for: clusterName ${clusterName}"
@@ -53,13 +50,10 @@ echo "Values assigned for: clusterResourceId ${clusterResourceId}"
 echo "Values assigned for: dcrRuleId ${dcrRuleId}"
 echo "Values assigned for: dcrTempFile ${dcrTempFile}"
 echo "Values assigned for: dceName ${dceName}"
-echo "Values assigned for: alertRuleName ${alertRuleName}"
-echo "Values assigned for: alertActionGroupName ${alertActionGroupName}"
-echo "Values assigned for: alertAdminEmail ${alertAdminEmail}"
-echo "Values assigned for: alertCPUThreshold ${alertCPUThreshold}"
-echo ""
+
 
 # Ensure that the Azure CLI is logged in and set to the correct subscription
+echo ""
 echo "Ensuring that the Azure CLI is logged in and set to the correct subscription" | tee -a $logfile
 if az account show --output none; then
     echo "Setting subscription to ${subscription}" | tee -a $logfile
@@ -144,29 +138,4 @@ then
     az monitor data-collection rule association create --name "${dcrAssociationName}" --resource "${clusterResourceId}" --rule-id "${dcrRuleId}" || { echo "Failed to create DCR Association. Exiting." | tee -a $logfile; exit 1; }
 else
     echo "DCR association with name ${dcrAssociationName} already exits. Skipping DCR association creation!" | tee -a $logfile
-fi
-
-echo ""
-echo "Checking if Action Group ${alertActionGroupName} exists" | tee -a $logfile
-alertActionGrpIds=$(az monitor action-group list --resource-group "${resourceGroup}" --query "[?name=='${alertActionGroupName}'].[id]" --output tsv || { echo "Failed to list Action Group. Exiting." | tee -a $logfile; exit 1; })
-if [ -z "${alertActionGrpIds}" ]
-then
-    echo "Create Action Group for ${alertActionGroupName}" | tee -a $logfile
-    az monitor action-group create --name ${alertActionGroupName} --resource-group "${resourceGroup}" --location "${region}" --action "email hcicluster-action ${adminEmail}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
-
-    alertActionGrpIds=$(az monitor action-group list --resource-group "${resourceGroup}" --query "[?name=='${alertActionGroupName}'].[id]" --output tsv || { echo "Failed to list Action Group. Exiting." | tee -a $logfile; exit 1; })
-else
-    echo "Action Group with name ${alertActionGroupName} already exits. Skipping Action Group creation!" | tee -a $logfile
-fi
-
-echo ""
-echo "Checking if Log Alert Rule ${alertRuleName} exists" | tee -a $logfile
-alertRuleIds=$(az monitor scheduled-query list --resource-group "${resourceGroup}" --query "[?name=='${alertRuleName}'].[id]" --output tsv || { echo "Failed to list Log Alert Rule. Exiting." | tee -a $logfile; exit 1; })
-if [ -z "${alertRuleIds}" ]
-then
-    echo "Create Log Alert Rule for ${alertRuleName}" | tee -a $logfile
-
-    az monitor scheduled-query create --resource-group "${resourceGroup}" -n "${alertRuleName}" --scopes "${clusterResourceId}" --location "${region}" --action-groups "${alertActionGrpIds}" --evaluation-frequency "1h" --severity "" --condition "Event | where EventLog =~ ;'Microsoft-Windows-SDDC-Management/Operational' and EventID == '3000' | extend ClusterData = parse_xml(EventData) | extend ClusterName = tostring(ClusterData.DataItem.UserData.EventData['ClusterName']) | extend ClusterArmId = tostring(ClusterData.DataItem.UserData.EventData['ArmId']) | where ClusterArmId =~ '${clusterResourceId}' | summarize arg_max(TimeGenerated, RenderedDescription) | extend servers_information = parse_json(RenderedDescription).m_servers | mv-expand servers_information | extend Nodename = tostring(servers_information.m_name) | extend UsedCpuPercentage = toint(servers_information.m_totalProcessorsUsedPercentage)| where UsedCpuPercentage >= ${alertCPUThreshold}" --description "Alert rule created via automation!"  || { echo "Failed to create Log Alert Rule. Exiting." | tee -a $logfile; exit 1; }
-else
-    echo "Log Alert Rule with name ${dcrAssociationName} already exits. Skipping DCR association creation!" | tee -a $logfile
 fi
