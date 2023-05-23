@@ -191,59 +191,66 @@ You'll also need the following installed locally:
 ## Create workflow steps
 1. Create `.github/workflows/vmimage-workflow.yml`
 2. Save your changes to the file. Your file should look like this example:
-    ```yaml
-    name: deploy-vmimages
+```yaml
+name: deploy-vmimages
 
-    on: [workflow_dispatch]
+on: [workflow_dispatch]
 
-    permissions:
-    id-token: write
-    contents: read
+permissions:
+  id-token: write
+  contents: read
 
-    jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v3
-        - uses: azure/login@v1
-        with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        - uses: azure/arm-deploy@v1
-        with:
-            deploymentName: ${{ github.run_number }}
-            resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-            template: ./bicep/vmimage-create.bicep
+env:
+  AZURE_RESOURCEGROUP_NAME: demo-rg #Replace with your resource group name
 
-    ```
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - uses: azure/arm-deploy@v1
+      with:
+        deploymentName: ${{ github.run_number }}
+        resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+        template: ./bicep/vmimage-create.bicep
+```
 3. Create `.github/workflows/vm-workflow.yml`
 4. Save your changes to the file. Your file should look like this example:
-    ```yaml
-    name: deploy-vms
+```yaml
+name: deploy-vms
 
-    on: [workflow_dispatch]
+on: [workflow_dispatch]
 
-    permissions:
-    id-token: write
-    contents: read
+permissions:
+  id-token: write
+  contents: read
 
-    jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v3
-        - uses: azure/login@v1
-        with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        - uses: azure/arm-deploy@v1
-        with:
-            deploymentName: ${{ github.run_number }}
-            resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-            template: ./bicep/vm-create.bicep
-    ```
+env:
+  AZURE_RESOURCEGROUP_NAME: demo-rg #Replace with your resource group name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - uses: azure/arm-deploy@v1
+      with:
+        deploymentName: ${{ github.run_number }}
+        resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+        template: ./bicep/vm-create.bicep
+        parameters: adminPassword=${{ secrets.VMADMIN_DEFAULT_PASSWORD }}
+
+```
 5. In the Visual Studio Code terminal, stage your changes, commit them to your repository, and push them to Azure Repos:
     ```bash
     git add .
