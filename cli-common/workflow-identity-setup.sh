@@ -104,14 +104,14 @@ fi
 
 #create new role assignment
 echo "Checking new role assignment for ${githubRepoAppId}" | tee -a $logfile
-roleAssignmentIds=$(az role assignment list --scope ${clusterResourceGrp} --assignee "${githubRepoAppId}" --query "[].[id]" -o "tsv" || { echo "Failed to list role assignment. Exiting." | tee -a $logfile; exit 1; })
+roleAssignmentIds=$(az role assignment list --scope ${resourcegroup} --assignee "${githubRepoAppId}" --query "[].[id]" -o "tsv" || { echo "Failed to list role assignment. Exiting." | tee -a $logfile; exit 1; })
 if [ -z "${roleAssignmentIds}" ]
 then
     echo "Role assignment for ${githubRepoAppId} does not exist" | tee -a $logfile
 
     #create new role assignment
     echo "Creating role assignment for ${githubRepoAppId}" | tee -a $logfile
-    az role assignment create --assignee "${githubRepoAppId}" --role "Contributor" --scope "${clusterResourceGrp}"|| { echo "Failed to create role assignment. Exiting." | tee -a $logfile; exit 1; }
+    az role assignment create --assignee "${githubRepoAppId}" --role "Contributor" --scope "${resourcegroup}"|| { echo "Failed to create role assignment. Exiting." | tee -a $logfile; exit 1; }
 else
     echo "Role assignment for ${githubRepoAppId} exists. Skipping create!" | tee -a $logfile
 fi
