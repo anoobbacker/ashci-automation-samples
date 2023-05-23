@@ -40,8 +40,8 @@ You'll also need the following installed locally:
 ## Create a workflow identity
 1. Launch Cloud Shell from the the top navigation of the Azure Portal. Refer [Quickstart for Azure Cloud Shell](https://learn.microsoft.com/azure/cloud-shell/quickstart?tabs=azurecli)
 2. Upload the below files into Cloud Shell. Refer [Upload files](https://learn.microsoft.com/azure/cloud-shell/using-the-shell-window#upload-and-download-files)
-    1. To setup identity, upload script [../cli-common/workflow-identity-setup.sh](../cli-common/workflow-identity-setup.sh) 
-    2. To set up AAD Federation Credentials, upload JSON [../json/aad-fed-cred.json](../json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON
+    1. To setup identity, upload script [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh) 
+    2. To set up AAD Federation Credentials, upload JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON
 3. In Azure Cloud Shell, change the permission to execute the file.
     ```bash
     chmod +x workflow-identity-setup.sh
