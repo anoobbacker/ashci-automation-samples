@@ -28,7 +28,7 @@ You want to find a way to automate this process.
 # Steps
 
 ## Prerequisites
-To work through the sample, you'll need an Azure account, and [insights prerequisites configured](https://learn.microsoft.com/azure-stack/hci/manage/monitor-hci-single?tabs=22h2#prerequisites-for-enabling-insights).
+To work through the sample, you'll need an Azure account, and [Arc-enabled VMs deployed](https://learn.microsoft.com/azure-stack/hci/manage/azure-arc-vm-management-overview).
 
 You'll also need the following installed locally:
 - [Visual Studio Code](https://code.visualstudio.com/)
