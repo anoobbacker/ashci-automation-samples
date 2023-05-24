@@ -163,6 +163,8 @@ You'll also need the following installed locally:
     echo "Values assigned for: dcrRuleId ${dcrRuleId}"
     echo "Values assigned for: dcrTempFile ${dcrTempFile}"
     echo "Values assigned for: dceName ${dceName}"
+    
+    
     ```
 2. Replace the variables with your environment values like _subscription_, _resourcegroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkspace_, _dcrAssociationName_
 3. Ensure that subscription is set properly add the below:
