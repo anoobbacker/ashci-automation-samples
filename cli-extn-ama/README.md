@@ -281,8 +281,8 @@ fi
     dcrRuleAssocIds=$(az monitor data-collection rule association list --resource-group "${resourceGroup}" --rule-name "${dcrName}" --query "[?name=='${dcrAssociationName}'].[id]" --output tsv || { echo "Failed to list DCR Association. Exiting." | tee -a $logfile; exit 1; })
     if [ -z "${dcrRuleAssocIds}" ]
     then
-        echo "Create DCR associating for ${dcrRuleId} ==> ${dcrClusterResourceId}" | tee -a $logfile
-        az monitor data-collection rule association create --name "${dcrAssociationName}" --resource "${dcrClusterResourceId}" --rule-id "${dcrRuleId}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
+        echo "Create DCR associating for ${dcrRuleId} ==> ${clusterResourceId}" | tee -a $logfile
+        az monitor data-collection rule association create --name "${dcrAssociationName}" --resource "${clusterResourceId}" --rule-id "${dcrRuleId}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
     else
         echo "DCR association with name ${dcrAssociationName} already exits. Skipping creation!" | tee -a $logfile
     fi
