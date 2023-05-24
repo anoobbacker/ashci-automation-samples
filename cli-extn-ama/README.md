@@ -180,6 +180,7 @@ You'll also need the following installed locally:
         echo "Azure CLI not logged in. Please log in and try again." | tee -a $logfile
         exit 1
     fi
+    
     ```
 4. To set up the Insights extension add the below:
     ```bash
@@ -210,6 +211,7 @@ You'll also need the following installed locally:
     else
         echo "Extension with name ${extensionName} already exits. Skipping extension creation!" | tee -a $logfile
     fi
+    
     ```
 5. To create Log Analytics Workspace add the below:
 ```bash
@@ -225,6 +227,7 @@ then
 else
     echo "Log Analytics Workspace with name ${dcrWorkSpace} already exits. Skipping creation!" | tee -a $logfile
 fi
+
 ```
 7. To create Data Collection Endpoint add the below:
     ```bash
@@ -240,6 +243,7 @@ fi
     else
         echo "DCE with name ${dceName} already exits. Skipping creation!" | tee -a $logfile
     fi
+    
     ```
 
 6. To create Data Association Rule (DCR) add the below:
@@ -268,6 +272,7 @@ fi
     else
         echo "DCR with name ${dcrName} already exits. Skipping creation!" | tee -a $logfile
     fi
+    
     ```
 7. To create DCR Association, add the below:
     ```bash
@@ -281,6 +286,7 @@ fi
     else
         echo "DCR association with name ${dcrAssociationName} already exits. Skipping creation!" | tee -a $logfile
     fi
+    
     ```
 # Start Azure Cloud Shell instance via VS Code
 1. To sign in, go to **View** > **Command Pallete** and type _Azure: Sign In_. There are mulitple commands that may be used to sign in to Azure.
