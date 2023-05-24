@@ -36,7 +36,7 @@ You'll also need the following installed locally:
 - On Windows: Requires Node.js 6 or later to be installed (https://nodejs.org).
 
 Install the below Azure CLI extensions:
-- To set up Arc-VM Management Client on Azure Stack HCI, run the command `az extension add --name stackhci`
+- To set up Arc-VM Management Client on Azure Stack HCI, run the command `az extension add --name azurestackhci`
 
 ## Create scripts to start and stop VMs
 1. To manage virtual machines, open Visual Studio Code Explorer and at the root of your project folder, create `hci-vm-start.sh` and `hci-vm-stop.sh`.
