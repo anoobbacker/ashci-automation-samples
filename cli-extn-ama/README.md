@@ -166,7 +166,7 @@ You'll also need the following installed locally:
     
     
     ```
-2. Replace the variables with your environment values like _subscription_, _resourcegroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkspace_, _dcrAssociationName_
+2. Replace the variables with your environment values like _subscription_, _resourcegroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkSpaceRg_, _dcrWorkspace_, _dcrAssociationName_ and _dceName_
 3. Ensure that subscription is set properly add the below:
     ```bash
     # Ensure that the Azure CLI is logged in and set to the correct subscription
