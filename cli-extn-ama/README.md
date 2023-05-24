@@ -128,7 +128,7 @@ You'll also need the following installed locally:
     resourceGroup=${2:-"hcicluster-rg"} # Replace with your resource group name
     region=${3:-"eastus"} # Replace with your region
     clusterName=${4:-"hcicluster"} # Replace with your cluster name
-    dcrName=${5:-"hcicluster-dcr-rule"} # Replace with your DCR name
+    dcrName=${5:-"hcicluster-dcr"} # Replace with your DCR name
     dcrFile=${6:-"dcr.json"} # Replace with your DCR file
     dcrWorkSpaceRg=${7:-"hcicluster-rg"} # Replace with your Log Analytics workspace resoruce group
     dcrWorkSpace=${8:-"hcicluster-la-workspace"} # Replace with your Log Analytics workspace name
