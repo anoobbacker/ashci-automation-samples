@@ -261,7 +261,7 @@ jobs:
         parameters: adminPassword=${{ secrets.VMADMIN_DEFAULT_PASSWORD }}
 
 ```
-5. In the Visual Studio Code terminal, stage your changes, commit them to your repository, and push them to Azure Repos:
+5. In the Visual Studio Code terminal, stage your changes, commit them to your repository, and push them to GitHub repo:
     ```bash
     git add .
     git commit -m 'Add Azure Bicep and GitHub Action Workflows'
