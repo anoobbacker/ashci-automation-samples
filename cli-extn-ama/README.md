@@ -155,6 +155,7 @@ You'll also need the following installed locally:
     echo "Values assigned for: extensionType ${extensionType}"
     echo "Values assigned for: dcrName ${dcrName}"
     echo "Values assigned for: dcrFile ${dcrFile}"
+    echo "Values assigned for: dcrWorkSpaceRg ${dcrWorkSpaceRg}"
     echo "Values assigned for: dcrWorkSpace ${dcrWorkSpace}"
     echo "Values assigned for: dcrId ${dcrId}"
     echo "Values assigned for: dcrAssociationName ${dcrAssociationName}"
@@ -235,7 +236,7 @@ fi
         echo "Creating DCE ${dceName}" | tee -a $logfile
         az monitor data-collection endpoint create --resource-group "${resourcegroup}" --location "${region}" --name "${dceName}" --public-network-access "Enabled" || { echo "Failed to DCE. Exiting." | tee -a $logfile; exit 1; }
     else
-        echo "DCE with name ${dceName} already exits. Skipping DCE creation!" | tee -a $logfile
+        echo "DCE with name ${dceName} already exits. Skipping creation!" | tee -a $logfile
     fi
     ```
 
@@ -254,16 +255,16 @@ fi
         echo "Replacing placeholders in DCR file ${dcrTempFile}" | tee -a $logfile
         sed -i "s/WORKSPACENAME-PLACEHOLDER/${dcrWorkSpace}/g" "${dcrTempFile}" || { echo "Failed to replace WORKSPACE-RESOURCE-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile; }
         sed  -i "s/SUBSCRIPTION-PLACEHOLDER/${subscription}/g" "${dcrTempFile}" || { echo "Failed to replace SUBSCRIPTION-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
-        sed  -i "s/RESOURCEGROUP-PLACEHOLDER/${resourcegroup}/g" "${dcrTempFile}" || { echo "Failed to replace RESOURCEGROUP-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
+        sed  -i "s/RESOURCEGROUP-PLACEHOLDER/${dcrWorkSpaceRg}/g" "${dcrTempFile}" || { echo "Failed to replace RESOURCEGROUP-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
         sed  -i "s/DCR-NAME-PLACEHOLDER/${dcrWorkSpace}/g" "${dcrTempFile}" || { echo "Failed to replace DCR-NAME-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
         sed  -i "s/DCR-ID-PLACEHOLDER/${dcrId}/g" "${dcrTempFile}" || { echo "Failed to replace DCR-ID-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}
         sed  -i "s/DCE-NAME-PLACEHOLDER/${dceName}/g" "${dcrTempFile}" || { echo "Failed to replace DCE-NAME-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}    
 
         echo "Creating DCR ${dcrName} using ${dcrTempFile}"  | tee -a $logfile
-        az monitor data-collection rule create --name "${dcrName}" --resource-group "${resourcegroup}" --rule-file "${dcrTempFile}" --description "Automation Demo DCR created" --location "${region}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
+        az monitor data-collection rule create --name "${dcrName}" --resource-group "${resourcegroup}" --rule-file "${dcrTempFile}" --description "Automation Demo DCR created" --location "${region}" || { echo "Failed to DCR. Exiting." | tee -a $logfile; exit 1; }
         
     else
-        echo "DCR with name ${dcrName} already exits. Skipping DCR creation!" | tee -a $logfile
+        echo "DCR with name ${dcrName} already exits. Skipping creation!" | tee -a $logfile
     fi
     ```
 7. To create DCR Association, add the below:
@@ -276,7 +277,7 @@ fi
         echo "Create DCR associating for ${dcrRuleId} ==> ${dcrClusterResourceId}" | tee -a $logfile
         az monitor data-collection rule association create --name "${dcrAssociationName}" --resource "${dcrClusterResourceId}" --rule-id "${dcrRuleId}" || { echo "Failed to create extension. Exiting." | tee -a $logfile; exit 1; }
     else
-        echo "DCR association with name ${dcrAssociationName} already exits. Skipping DCR association creation!" | tee -a $logfile
+        echo "DCR association with name ${dcrAssociationName} already exits. Skipping creation!" | tee -a $logfile
     fi
     ```
 # Start Azure Cloud Shell instance via VS Code
