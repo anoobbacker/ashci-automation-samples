@@ -166,7 +166,7 @@ You'll also need the following installed locally:
     
     
     ```
-2. Replace the variables with your environment values like _subscription_, _resourcegroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkSpaceRg_, _dcrWorkspace_, _dcrAssociationName_ and _dceName_
+2. Replace the variables with your environment values like _subscription_, _resourceGroup_, _region_, _clusterName_, _dcrName_, _dcrFile_, _dcrWorkSpaceRg_, _dcrWorkspace_, _dcrAssociationName_ and _dceName_
 3. Ensure that subscription is set properly add the below:
     ```bash
     # Ensure that the Azure CLI is logged in and set to the correct subscription
@@ -190,7 +190,7 @@ You'll also need the following installed locally:
     extn_ids=$(az stack-hci extension list \
         --arc-setting-name "${arcSettingName}" \
         --cluster-name "${clusterName}" \
-        --resource-group "${resourcegroup}"  \
+        --resource-group "${resourceGroup}"  \
         --query "[?name=='${extensionName}'].{Name:name, ManagedBy:managedBy, ProvisionStatus:provisioningState, State: aggregateState, Type:extensionParameters.type}"  \
         -o table) || { echo "Failed to get extension list. Exiting."| tee -a $logfile; exit 1; }
 
@@ -202,7 +202,7 @@ You'll also need the following installed locally:
         az stack-hci extension create \
             --arc-setting-name "${arcSettingName}" \
             --cluster-name "${clusterName}" \
-            --resource-group "${resourcegroup}" \
+            --resource-group "${resourceGroup}" \
             --name "${extensionName}" \
             --auto-upgrade "true" \
             --publisher "${extensionPublisher}" \
@@ -233,13 +233,13 @@ fi
     ```bash
     echo ""
     echo "Checking if DCE ${dceName} exists" | tee -a $logfile
-    dceIds=$(az monitor data-collection endpoint list --resource-group "${resourcegroup}" --query "[?name=='${dceName}'].[id]" --output tsv || { echo "Failed to list DCE. Exiting." | tee -a $logfile; exit 1; })
+    dceIds=$(az monitor data-collection endpoint list --resource-group "${resourceGroup}" --query "[?name=='${dceName}'].[id]" --output tsv || { echo "Failed to list DCE. Exiting." | tee -a $logfile; exit 1; })
     if [ -z "${dceIds}" ]
     then
         echo "No DCE found with name ${dceName}" | tee -a $logfile
 
         echo "Creating DCE ${dceName}" | tee -a $logfile
-        az monitor data-collection endpoint create --resource-group "${resourcegroup}" --location "${region}" --name "${dceName}" --public-network-access "Enabled" || { echo "Failed to DCE. Exiting." | tee -a $logfile; exit 1; }
+        az monitor data-collection endpoint create --resource-group "${resourceGroup}" --location "${region}" --name "${dceName}" --public-network-access "Enabled" || { echo "Failed to DCE. Exiting." | tee -a $logfile; exit 1; }
     else
         echo "DCE with name ${dceName} already exits. Skipping creation!" | tee -a $logfile
     fi
@@ -250,7 +250,7 @@ fi
     ```bash
     echo ""
     echo "Checking if DCR ${dcrName} exists" | tee -a $logfile
-    dcrRuleIds=$(az monitor data-collection rule list --resource-group "${resourcegroup}" --query "[?name=='${dcrName}'].[id, name, location]" --output tsv || { echo "Failed to list DCR. Exiting." | tee -a $logfile; exit 1; })
+    dcrRuleIds=$(az monitor data-collection rule list --resource-group "${resourceGroup}" --query "[?name=='${dcrName}'].[id, name, location]" --output tsv || { echo "Failed to list DCR. Exiting." | tee -a $logfile; exit 1; })
     if [ -z "${dcrRuleIds}" ]
     then
         echo "No DCR found with name ${dcrName}" | tee -a $logfile
@@ -267,7 +267,7 @@ fi
         sed  -i "s/DCE-NAME-PLACEHOLDER/${dceName}/g" "${dcrTempFile}" || { echo "Failed to replace DCE-NAME-PLACEHOLDER in DCR file. Exiting." | tee -a $logfile;}    
 
         echo "Creating DCR ${dcrName} using ${dcrTempFile}"  | tee -a $logfile
-        az monitor data-collection rule create --name "${dcrName}" --resource-group "${resourcegroup}" --rule-file "${dcrTempFile}" --description "Automation Demo DCR created" --location "${region}" || { echo "Failed to DCR. Exiting." | tee -a $logfile; exit 1; }
+        az monitor data-collection rule create --name "${dcrName}" --resource-group "${resourceGroup}" --rule-file "${dcrTempFile}" --description "Automation Demo DCR created" --location "${region}" || { echo "Failed to DCR. Exiting." | tee -a $logfile; exit 1; }
         
     else
         echo "DCR with name ${dcrName} already exits. Skipping creation!" | tee -a $logfile
@@ -278,7 +278,7 @@ fi
     ```bash
     echo ""
     echo "Checking if DCR association ${dcrAssociationName} exists" | tee -a $logfile
-    dcrRuleAssocIds=$(az monitor data-collection rule association list --resource-group "${resourcegroup}" --rule-name "${dcrName}" --query "[?name=='${dcrAssociationName}'].[id]" --output tsv || { echo "Failed to list DCR Association. Exiting." | tee -a $logfile; exit 1; })
+    dcrRuleAssocIds=$(az monitor data-collection rule association list --resource-group "${resourceGroup}" --rule-name "${dcrName}" --query "[?name=='${dcrAssociationName}'].[id]" --output tsv || { echo "Failed to list DCR Association. Exiting." | tee -a $logfile; exit 1; })
     if [ -z "${dcrRuleAssocIds}" ]
     then
         echo "Create DCR associating for ${dcrRuleId} ==> ${dcrClusterResourceId}" | tee -a $logfile
