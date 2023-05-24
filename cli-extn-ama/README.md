@@ -1,7 +1,7 @@
 # Azure CLI Automation: Enable Azure Monitor HCI Insights on Azure Stack HCI
 In this sample, you'll learn how to create Azure Monitor HCI Insights on HCI and confgure Alert rules for Email notification using Azure CLI.
 
-Short URL to this page: [https://aka.ms/ashci/automate-cli/extension-ama](https://aka.ms/ashci/automate-cli/extn-ama)
+Short URL to this page: [https://aka.ms/ashci/automate-cli/extension-ama](https://aka.ms/ashci/automate-cli/extension-ama)
 
 # Problem
 - Performing multiple tasks on many HCI clusters through Azure Portal become an effort intensive and time-consuming process, especially when these tasks needs to be frequently repeated.
