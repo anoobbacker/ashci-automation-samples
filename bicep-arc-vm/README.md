@@ -298,17 +298,22 @@ In this case, there's two VM images and a VM created using that VM image.
 ## Update the workflow you created to run automatically 
 A collegue asks you to enable creation of the VMs so that they can follow the same steps whenever similar VM creation requests come. You'll update the VM creation workflow to run automatically whenever a the Bicep file changes on your main branch.
 1. In Visual Studio Code, open the .github/workflows/vm-workflow.yml file.
-2. At the top of the file, after the line `name: deploy-vms`, remove remove the manual trigger, which is the line that currently reads `on: [workflow_dispatch]` and add the following code to prevent multiple simultaneous workflows runs:
-    ```diff
-    - on: [workflow_dispatch]
-    + on:
-    +  push:
-    +    branches:
-    +      - main
-    +    paths:
-    +      - 'bicep/vm-create.bicep'
-    +
-    ```
+2. At the top of the file, after the line `name: deploy-vms`, remove the manual trigger, which is the line that currently reads `on: [workflow_dispatch]`
+```diff
+- on: [workflow_dispatch]
+```
+3. Between `name:` and `permissions:` add the following code to prevent multiple simultaneous workflows runs and trigger definition of Bicep file change:
+```yaml
+concurrency: create-vms
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bicep/vm-create.bicep'
+
+```
 3. In the Visual Studio Code terminal, commit your changes and push them:
     ```bash
     git add .
