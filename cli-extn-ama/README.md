@@ -34,6 +34,10 @@ You'll also need the following installed locally:
 - The [Azure Account extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account).
 - On Windows: Requires Node.js 6 or later to be installed (https://nodejs.org).
 
+Install the below Azure CLI extensions:
+- To set up Azure Stack HCI Cluster Management Client, run the command `az extension add --name stack-hci`
+- To set up Azure Monitoring Client : Run the command,  run the command `az extension add --name monitor-control-service`
+
 ## Create DCR JSON
 1. To set up Azure Monitor Insights, open Visual Studio Code Explorer and at the root of your project folder, create `dcr.json`.
 2. Save your changes to the file. Your file should look like this example:
