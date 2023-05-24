@@ -163,7 +163,7 @@ You'll also need the following installed locally:
     @description('Array of VM configuration objects. This array is looped to create VMs')
     var vmList = [
     {
-        name: 'anbacker-bicep-vm01' //Replace with your VM name
+        name: 'anoob-bicep-vm01' //Replace with your VM name
         location: region
         customLocation: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/RESOURCE-GROUP-PLACEHOLDER/providers/microsoft.extendedlocation/customlocations/CUSTOMLOCATION-NAME-PLACEHOLDER' //Replace with your custom location ID
         hardwareProfile: {processors: 4, memoryGB: 8 } //Replace with your hardware profile
