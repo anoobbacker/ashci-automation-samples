@@ -17,14 +17,12 @@ Multiple such internal teams ask for new virtual machines regularly, so the depl
 You also want your colleagues to be able to make changes and deploy the VMs themselves. But you need to make sure your colleagues follow the same process that you use!
 
 # Solution
-You decide to create a deployment workflow that will run automatically every time the Bicep code is updated in your shared repository. The workflow will deploy your Bicep files to Azure.
-1. Author Azure Bicep file to create VM images and VMs
+You decided to create a deployment workflow that will run automatically every time the Bicep code is updated in your shared repository. The workflow will deploy your Bicep files to Azure.
+1. Author Azure Bicep file to create Azure Marketplace VM images and VMs
 2. Set up GitHub Actions to run automatically when Bicep code is updated
 3. Configure Actions to deploy VM images and VMs from Azure.
 
 ![image](https://github.com/anoobbacker/ashci-automation-samples/assets/13219906/85ad61a9-2936-4aa6-8290-65a241193881)
-
-
 
 # Steps
 
