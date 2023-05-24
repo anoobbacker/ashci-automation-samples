@@ -127,12 +127,13 @@ You'll also need the following installed locally:
     subscription=${1:-"00000000-0000-0000-0000-000000000000"} # Replace with your subscription ID
     resourceGroup=${2:-"hcicluster-rg"} # Replace with your resource group name
     region=${3:-"eastus"} # Replace with your region
-    clusterName=${4:-"HCICluster"} # Replace with your cluster name
+    clusterName=${4:-"hcicluster"} # Replace with your cluster name
     dcrName=${5:-"hcicluster-dcr-rule"} # Replace with your DCR name
     dcrFile=${6:-"dcr.json"} # Replace with your DCR file
-    dcrWorkSpace=${7:-"hcicluster-la-workspace01"} # Replace with your Log Analytics workspace name
-    dcrAssociationName=${8:-"hcicluster-dcr-association"} # Replace with your DCR association name
-    dceName=${9:-"hcicluster-dce"} # Replace with your DCE Name
+    dcrWorkSpaceRg=${7:-"hcicluster-rg"} # Replace with your Log Analytics workspace resoruce group
+    dcrWorkSpace=${8:-"hcicluster-la-workspace"} # Replace with your Log Analytics workspace name
+    dcrAssociationName=${9:-"hcicluster-dcr-association"} # Replace with your DCR association name
+    dceName=${10:-"hcicluster-dce"} # Replace with your DCE Name
 
     # Assign variables
     extensionName="AzureMonitorWindowsAgent"
@@ -207,7 +208,22 @@ You'll also need the following installed locally:
         echo "Extension with name ${extensionName} already exits. Skipping extension creation!" | tee -a $logfile
     fi
     ```
-5. To create Data Collection Endpoint add the below:
+5. To create Log Analytics Workspace add the below:
+```bash
+echo ""
+echo "Checking if Log Analytics Workspace ${dcrWorkSpace} exists" | tee -a $logfile
+wrkSpcIds=$(az monitor log-analytics workspace list --query "[?name=='${dcrWorkSpace}'].[id, name, location]" --output tsv || { echo "Failed to list DCR. Exiting." | tee -a $logfile; exit 1; })
+if [ -z "${wrkSpcIds}" ]
+then
+    echo "No Log Analytics Workspace found with name ${dcrWorkSpace}" | tee -a $logfile
+
+    echo "Creating Log Analytics Workspace ${dcrWorkSpace}" | tee -a $logfile
+    az monitor log-analytics workspace create --resource-group "${dcrWorkSpaceRg}" --workspace-name "${dcrWorkSpace}" --location "${region}"|| { echo "Failed to create Log Analytics Workspace. Exiting." | tee -a $logfile; exit 1; }
+else
+    echo "Log Analytics Workspace with name ${dcrWorkSpace} already exits. Skipping creation!" | tee -a $logfile
+fi
+```
+7. To create Data Collection Endpoint add the below:
     ```bash
     echo ""
     echo "Checking if DCE ${dceName} exists" | tee -a $logfile
