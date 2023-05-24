@@ -47,9 +47,15 @@ You'll also need the following installed locally:
 >    - Ensure that you've permissions to create Azure AD Application
 >    - Assign the AAD application "Contributor" permissions to the resource group where VMs and VM images will be created. You must have access to the `Microsoft.Authorization/roleAssignments/write` action. Of the built-in roles, only [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) and [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) and are granted access to this action.
 
-1. Download the files `workflow-identity-setup.sh` and `aad-fed-cred.json`:
+1. Download the files `workflow-identity-setup.sh` and `aad-fed-cred.json`. In the Visual Studio Code terminal, run this `wget` command to download the file.
     1. To setup identity, download script, [../cli-common/workflow-identity-setup.sh](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh)
+    ```bash
+    wget -o workflow-identity-setup.sh https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/cli-common/workflow-identity-setup.sh
+    ```
     2. To set up AAD Federation Credentials, download JSON [../json/aad-fed-cred.json](https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json). `workflow-identity-setup.sh` script uses this JSON.
+    ```bash
+    wget -o aad-fed-cred.json https://raw.githubusercontent.com/anoobbacker/ashci-automation-samples/main/json/aad-fed-cred.json
+    ```    
 2. Change the variables in `workflow-identity-setup.sh`
     ```bash
     # Assigning default values for variable
@@ -69,8 +75,8 @@ You'll also need the following installed locally:
     ```bash
     ...
     AZURE_CLIENT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    AZURE_TENANT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     AZURE_SUBSCRIPTION_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    AZURE_TENANT_ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     ```
 ## Create GitHub secrets
 1. In your browser, navigate to your GitHub repository.
