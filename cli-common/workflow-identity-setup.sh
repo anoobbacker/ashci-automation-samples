@@ -33,6 +33,7 @@ if [ ! -f $aadFedCredFile ]; then
 fi
 
 # Ensure that the Azure CLI is logged in and set to the correct subscription
+echo ""
 echo "Ensuring that the Azure CLI is logged in and set to the correct subscription" | tee -a $logfile
 if az account show --output none; then
     echo "Setting subscription to ${subscription}" | tee -a $logfile
@@ -43,6 +44,7 @@ else
 fi
 
 # Setup AAD App
+echo ""
 echo "Checking if AAD App ${githubRepositoryName} exists" | tee -a $logfile
 githubRepoAppId=$(az ad app list --display-name "${githubRepositoryName}" --query "[].[appId]" -o "tsv"|| { echo "Failed to list AAD App. Exiting." | tee -a $logfile; exit 1; })
 if [ -z "${githubRepoAppId}" ]
@@ -62,6 +64,7 @@ githubObjectId=$(az ad app list --display-name "${githubRepositoryName}" --query
 echo "AAD Ids: Object id = ${githubObjectId}, AppId = ${githubRepoAppId}" | tee -a $logfile
 
 # Setup AAD App Credentails  API permissions
+echo ""
 echo "Checking if AAD Fed Credentials for ${githubObjectId} exists" | tee -a $logfile
 githubFedCredId=$(az ad app federated-credential list --id "${githubObjectId}" --query "[].[id]" -o "tsv"|| { echo "Failed to list AAD Fed Credentials. Exiting." | tee -a $logfile; exit 1; })
 if [ -z "${githubFedCredId}" ]
@@ -89,6 +92,7 @@ else
 fi
 
 #create new Azure AD service principal
+echo ""
 echo "Checking new Azure AD Service Principal for ${githubObjectId}" | tee -a $logfile
 spIds=$(az ad sp list --filter "appId eq '${githubRepoAppId}'" --query "[].[id]" -o "tsv"|| { echo "Failed to list Azure AD Service Principal. Exiting." | tee -a $logfile; exit 1; })
 if [ -z "${spIds}" ]
@@ -103,15 +107,16 @@ else
 fi
 
 #create new role assignment
+echo ""
 echo "Checking new role assignment for ${githubRepoAppId}" | tee -a $logfile
-roleAssignmentIds=$(az role assignment list --scope ${resourcegroup} --assignee "${githubRepoAppId}" --query "[].[id]" -o "tsv" || { echo "Failed to list role assignment. Exiting." | tee -a $logfile; exit 1; })
+roleAssignmentIds=$(az role assignment list --subscription "${subscription}" --scope ${resourceGrp} --assignee "${githubRepoAppId}" --query "[].[id]" -o "tsv" || { echo "Failed to list role assignment. Exiting." | tee -a $logfile; exit 1; })
 if [ -z "${roleAssignmentIds}" ]
 then
     echo "Role assignment for ${githubRepoAppId} does not exist" | tee -a $logfile
 
     #create new role assignment
     echo "Creating role assignment for ${githubRepoAppId}" | tee -a $logfile
-    az role assignment create --assignee "${githubRepoAppId}" --role "Contributor" --scope "${resourcegroup}"|| { echo "Failed to create role assignment. Exiting." | tee -a $logfile; exit 1; }
+    az role assignment create --assignee "${githubRepoAppId}" --role "Contributor" --scope "${resourceGrp}" --subscription "${subscription}"|| { echo "You don't have permissions to perform role assignment. Ask your administrator provide ${githubRepoAppId} contributor access to ${resourcegroup}." | tee -a $logfile; }
 else
     echo "Role assignment for ${githubRepoAppId} exists. Skipping create!" | tee -a $logfile
 fi
