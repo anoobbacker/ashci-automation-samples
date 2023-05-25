@@ -250,7 +250,7 @@ fi
     
     ```
 
-6. To create Data Association Rule (DCR) add the below:
+6. To create Data Collection Rule (DCR) add the below:
     ```bash
     echo ""
     echo "Checking if DCR ${dcrName} exists" | tee -a $logfile
