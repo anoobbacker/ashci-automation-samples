@@ -269,8 +269,8 @@ jobs:
     ```
 
 ## Run your workflow for downloading VM images
-1. In your browser, open the workflow by selecting Actions > deploy-vmimages.
-2. Select Run workflow > Run workflow.
+1. In your browser, open the workflow by selecting **Actions** > **deploy-vmimages**.
+2. Select **Run workflow** > **Run workflow**.
 3. A new run of your workflow will appear in the runs list. If it doesn't appear, refresh your browser page.
 4. Select the running workflow to view the details of the run.
 5. Inspect the rest of your workflow output.
@@ -290,8 +290,9 @@ The workflow shows a successful deployment.
 ## Verify the deployment
 1. Go to the [Azure portal](https://portal.azure.com)
 2. Search for the resource group where the bicep template was deployed.
-3. Click Deployments menu to see the details of the deployment.
+3. Click _Deployments_ menu to see the details of the deployment.
 4. To see which resources were deployed, select the deployment. To expand the deployment and see more details, select Deployment details. 
+5. To see if the VMs and VM images are created, select the Azure Stack HCI cluster and navigate to _Virtual machines_ and _VM Images_ menue
 
 In this case, there's two VM images and a VM created using that VM image.
 
