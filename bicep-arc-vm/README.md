@@ -3,6 +3,10 @@ In this sample, you'll learn how to define creating Azure Marketplace VM images 
 
 Short URL to this page: [https://aka.ms/ashci/automate-bicep/github-actions](https://aka.ms/ashci/automate-bicep/github-actions)
 
+[![Automate: Azure Marketplace VMs on HCI using Bicep and GitHub Actions!](https://github.com/anoobbacker/ashci-automation-samples/assets/13219906/f88cfba5-5020-4741-b406-30360965721d)](https://learn.microsoft.com/events/azure-arc-hybrid-infrastructure-technical-event-series/automate-azure-marketplace-vms-on-hci-using-bicep-and-github-actions)
+|:--:|
+| <b>[Video recording - Automate: Azure Marketplace VMs on HCI using Bicep and GitHub Actions!](https://learn.microsoft.com/events/azure-arc-hybrid-infrastructure-technical-event-series/automate-azure-marketplace-vms-on-hci-using-bicep-and-github-actions)</b>|
+
 # Problem 
 1. To set up VM images, users manually had to download the operating system images, set up a VM, and create a generalized VM image.
 2. To keep track of new updates, such as security patches, bug fixes, and feature enhancements, users were manually tracking and deploying updates.
